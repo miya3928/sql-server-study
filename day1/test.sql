@@ -33,4 +33,25 @@ VALUES
   (5, N'井川', 20, N'東京'),
   (6, N'高島', 30, N'石川');
 
-  
+SELECT * FROM users
+ORDER BY age DESC;
+
+SELECT * FROM users
+ORDER BY age ASC;
+
+--update whereで指定する
+UPDATE users
+SET age = 26
+WHERE id = 1;
+
+SELECT * FROM users
+WHERE id = 1;
+
+--delete　事前確認してから消す
+SELECT * FROM users
+where id = 6;
+
+DELETE from users
+WHERE id = 6;
+
+SELECT * from users;

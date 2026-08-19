@@ -21,4 +21,16 @@ VALUES
   (3, N'佐藤', 30, N'福井');
 
 --*ですべて表示
-SELECT * FROM users;
+SELECT * FROM users
+WHERE age >= 25;
+
+SELECT * FROM users
+WHERE city = N'福井';
+
+INSERT into users(id,name,age,city)
+VALUES
+  (4, N'小倉', 25, N'大阪'),
+  (5, N'井川', 20, N'東京'),
+  (6, N'高島', 30, N'石川');
+
+  

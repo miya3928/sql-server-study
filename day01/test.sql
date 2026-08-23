@@ -43,7 +43,7 @@ ORDER BY age ASC;
 UPDATE users
 SET age = 26
 WHERE id = 1;
-
+--反映されているか確認
 SELECT * FROM users
 WHERE id = 1;
 

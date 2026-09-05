@@ -1,11 +1,12 @@
 USE sql_study;
 
-CREATE TABLE orders (
-  id INT PRIMARY KEY,
-  user_id INT,
-  product NVARCHAR(50),
-  price INT,
-);
+-- テーブル作成・データ追加は一度だけ実行
+-- CREATE TABLE orders (
+--   id INT PRIMARY KEY,
+--   user_id INT,
+--   product NVARCHAR(50),
+--   price INT,
+-- );
 
 INSERT INTO orders (id, user_id, product, price)
 VALUES
@@ -26,3 +27,51 @@ SELECT
 FROM users
 INNER JOIN orders
   ON users.id = orders.user_id;
+
+/* LEFT JOIN
+usersのデータを全部残す*/
+SELECT
+  users.name,
+  orders.product,
+  orders.price
+FROM users
+LEFT JOIN orders
+  ON users.id = orders.user_id;
+
+--ユーザーごとの注文金額の合計
+SELECT
+  users.name,
+  SUM (orders.price)
+FROM users
+INNER JOIN orders
+  ON users.id = orders.user_id
+  GROUP BY users.name;
+
+--注文金額の合計が300円以上のユーザーだけ表示
+SELECT
+  users.name,
+  SUM (orders.price)
+FROM users
+INNER JOIN orders
+  ON users.id = orders.user_id
+  GROUP BY users.name
+  HAVING SUM(orders.price) >= 300;
+
+--ユーザーごとの注文金額の合計を、金額が高い順に表示
+SELECT
+  users.name,
+  SUM (orders.price)
+FROM users
+INNER JOIN orders
+  ON users.id = orders.user_id
+  GROUP BY users.name
+  ORDER BY SUM(orders.price) DESC;
+
+--注文がないユーザーも含めて、ユーザーごとの注文金額の合計を表示
+SELECT
+  users.name,
+  SUM(orders.price)
+FROM users
+LEFT JOIN orders
+  ON users.id = orders.user_id
+  GROUP BY users.id, users.name;

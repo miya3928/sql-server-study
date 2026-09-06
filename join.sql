@@ -70,8 +70,52 @@ INNER JOIN orders
 --注文がないユーザーも含めて、ユーザーごとの注文金額の合計を表示
 SELECT
   users.name,
-  SUM(orders.price)
+  COALESCE(SUM(orders.price),0)
 FROM users
 LEFT JOIN orders
   ON users.id = orders.user_id
   GROUP BY users.id, users.name;
+
+--ユーザーごとの注文数を表示
+SELECT
+  users.name,
+  COUNT(orders.id)
+FROM users
+LEFT JOIN orders
+  ON users.id = orders.user_id
+  GROUP BY users.id, users.name;
+
+--注文数が2件以上のユーザーだけを表示
+SELECT
+  users.name,
+  COUNT(orders.id)
+FROM users
+INNER JOIN orders
+  ON users.id = orders.user_id
+  GROUP BY users.id, users.name
+  HAVING COUNT(orders.id) >= 2;
+
+--注文数が多いユーザー順に、ユーザー名と注文数を表示
+SELECT
+  users.name,
+  COUNT(orders.id)
+FROM users
+INNER JOIN orders
+  ON users.id = orders.user_id
+  GROUP BY users.id, users.name
+  ORDER BY COUNT(orders.id) DESC;
+
+--商品ごとの売上金額の合計を表示
+SELECT
+  orders.product,
+  SUM(orders.price)
+FROM orders
+INNER JOIN users
+  ON orders.user_id = users.id
+  GROUP BY orders.product;
+
+SELECT
+  orders.product,
+  SUM(orders.price)
+FROM orders
+  GROUP BY orders.product;

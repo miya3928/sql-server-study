@@ -110,8 +110,8 @@ SELECT
   orders.product,
   SUM(orders.price)
 FROM orders
-INNER JOIN users
-  ON orders.user_id = users.id
+--INNER JOIN users
+--ON orders.user_id = users.id
   GROUP BY orders.product;
 
 SELECT
@@ -119,3 +119,26 @@ SELECT
   SUM(orders.price)
 FROM orders
   GROUP BY orders.product;
+
+--福井に住んでいるユーザーの注文金額の合計を、ユーザーごとに表示
+--集計前の絞り込み→havingではなく、whereを使う
+SELECT
+  users.name,
+  SUM(orders.price)
+FROM users
+INNER JOIN orders
+  ON users.id = orders.user_id
+  WHERE users.city = N'福井'
+  GROUP BY users.id, users.name;
+
+/*注文履歴があるユーザーについて、ユーザーごとの注文金額の合計を計算し、
+合計金額が200円以上のユーザーだけを、合計金額の高い順に表示*/
+SELECT
+  users.name,
+  SUM(orders.price)
+FROM users
+INNER JOIN orders
+  ON users.id = orders.user_id
+  GROUP BY users.id,users.name
+  HAVING SUM(orders.price) >= 200
+  ORDER BY SUM(orders.price) DESC;

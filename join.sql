@@ -142,3 +142,28 @@ INNER JOIN orders
   GROUP BY users.id,users.name
   HAVING SUM(orders.price) >= 200
   ORDER BY SUM(orders.price) DESC;
+
+/*すべてのユーザーについて、注文回数と注文金額の合計を表示してください。
+注文がないユーザーも表示し、注文がない場合は合計金額を 0 としてください。さらに、注文回数が多い順に並べて*/
+SELECT
+  users.name,
+  COUNT(orders.id),
+  COALESCE(SUM(orders.price),0)
+FROM users
+LEFT JOIN orders
+  ON users.id = orders.user_id
+  GROUP BY users.id,users.name
+  ORDER BY COUNT(orders.id) DESC;
+
+/*すべてのユーザーについて、注文回数と注文金額の合計を表示してください。
+注文回数が2回以上のユーザーだけを表示し、注文金額の合計が高い順に並べて*/
+SELECT
+  users.name,
+  COUNT(orders.id),
+  SUM(orders.price)
+FROM users
+INNER JOIN orders
+  ON users.id = orders.user_id
+  GROUP BY users.id,users.name
+  HAVING COUNT(orders.id) >= 2
+  ORDER BY SUM(orders.price) DESC;

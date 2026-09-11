@@ -70,3 +70,26 @@ WHERE users.age IN(
   FROM users
   WHERE users.city = N'福井'
 );
+
+-- 福井」に住んでいるユーザーと同じ年齢ではないユーザーを、全ユーザーから取得
+-- 表示するのはid、name、age、city
+SELECT *
+FROM users
+WHERE users.age NOT IN(
+  SELECT users.age
+  FROM users
+  WHERE users.city =N'福井'
+);
+
+-- ユーザーの年齢を判定してください。
+-- 30歳以上 → N'30代以上'、30歳未満 → N'30歳未満'
+-- 表示する列：id、name、age、そしてCASEで作るage_category
+SELECT
+  users.id,
+  users.name,
+  users.age,
+  CASE
+    WHEN users.age >= 30 THEN N'30代以上'
+    ELSE N'30歳未満'
+  END AS age_category
+FROM users;

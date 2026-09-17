@@ -120,3 +120,76 @@ FROM users
 LEFT JOIN orders
   ON users.id = orders.user_id
 GROUP BY users.id, users.name;
+
+-- NULL問題⑤
+--
+-- usersとordersをLEFT JOINしてください。
+--
+-- 【条件】
+-- ・全ユーザーを表示する
+-- ・users.nameを表示する
+-- ・注文の合計金額を表示する
+-- ・注文がないユーザーも表示する
+
+SELECT
+  users.name,
+  COALESCE(SUM(orders.price), 0) AS N'合計金額'
+FROM users
+LEFT JOIN orders
+  ON users.id = orders.user_id
+GROUP BY users.id, users.name;
+
+-- NULL問題⑥
+--
+-- usersとordersをLEFT JOINしてください。
+--
+-- 【条件】
+-- ・全ユーザーを表示する
+-- ・users.nameを表示する
+-- ・注文の合計金額を表示する
+-- ・注文がない場合は0と表示する
+-- ・合計金額が300以上のユーザーには
+--   「購入あり」と表示する
+-- ・合計金額が300未満、または注文がないユーザーには
+--   「購入少なめ」と表示する
+
+SELECT
+  users.name,
+  COALESCE(SUM(orders.price),0) AS N'合計金額',
+    CASE
+      WHEN SUM(orders.price) >= 300 THEN N'購入あり'
+      ELSE N'購入少なめ'
+    END
+FROM users
+LEFT JOIN orders
+  ON users.id = orders.user_id
+GROUP BY users.id, users.name;
+
+-- NULL問題⑦：最終問題
+--
+-- usersとordersをLEFT JOINしてください。
+--
+-- 【条件】
+-- ・全ユーザーを表示する
+-- ・ユーザー名を表示する
+-- ・注文数を表示する
+-- ・合計金額を表示する
+-- ・注文がない場合、合計金額は0と表示する
+-- ・合計金額が300以上なら「優良顧客」
+-- ・合計金額が1以上300未満なら「通常顧客」
+-- ・注文がない場合は「未購入」
+--
+-- 購入状態も表示してください。
+
+SELECT
+  users.name,
+  COALESCE(SUM(orders.price), 0) AS N'合計金額',
+    CASE
+      WHEN SUM(orders.price) >= 300 THEN N'優良顧客'
+      WHEN SUM(orders.price) >= 1 THEN N'通常顧客'
+      ELSE N'未購入'
+    END AS N'購入状態'
+FROM users
+LEFT JOIN orders
+  ON users.id = orders.user_id
+GROUP BY users.id, users.name;
